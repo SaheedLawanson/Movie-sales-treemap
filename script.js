@@ -47,11 +47,14 @@ let treeMap = () => {
         each movie and stores them as property of the hierarchy variable */
     createTreeMap(hierarchy)
 
-    // Creating block elements inside the canvas
+    // Creating group elements inside the canvas to house rect and text
+    // elements because rect elements can't contain text
     let block = canvas.selectAll('g')
                         .data(leaves)
                         .enter()
                         .append('g')
+                        // positioning each group element according to the dimensions
+                        // calculated by the D3.js createTreeMap function
                         .attr('transform', d => 'translate('+d.x0+', '+d.y0+')')
 
     // Create tooltip 
@@ -61,7 +64,7 @@ let treeMap = () => {
     // Creating rect elements for each datapoint
     block.append('rect')
         .attr('class', 'tile')
-        .attr('fill', person => {               // Color each block based on the movie category
+        .attr('fill', person => {               // Color each rect based on the movie category
             let parentName = person.parent.data.name
             let parentList = person.parent.parent.data.children.map(parentObj => {
                 return parentObj.name
@@ -74,7 +77,7 @@ let treeMap = () => {
             }
         })
 
-        // Dimensions of each block (calculated by our createTreeMap function)
+        // Dimensions of each rect element (calculated by our createTreeMap function)
         .attr('width', d => d.x1 - d.x0)           
         .attr('height', d => d.y1 - d.y0)
 
@@ -131,12 +134,12 @@ function createLegend(){
                    }
                 }
             })
-            .attr('y', (d, i) => i*20 + i*10 - 45)
-            .attr('x', 40)
+            .attr('y', (d, i) => i*20 + i*10 - 45)  // Positioning legend text descriptions 
+            .attr('x', 40)                          // to match the colored rect elements
             .attr('class', 'legend-labels')
 }
 
-// Pulling API
+// Pulling API data
 d3.json(url).then(
     (dataJson, error) => {
         if (error) {console.log(error)}
