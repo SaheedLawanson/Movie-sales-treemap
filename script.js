@@ -73,9 +73,12 @@ let treeMap = () => {
                 }
             }
         })
+
         // Dimensions of each block (calculated by our createTreeMap function)
         .attr('width', d => d.x1 - d.x0)           
         .attr('height', d => d.y1 - d.y0)
+
+        //  Makes tool tip text visible conditional on the mouse over event
         .on('mouseover', d => {
             toolTip.transition()
                  .style('visibility', 'visible')
@@ -84,6 +87,8 @@ let treeMap = () => {
             toolTip.text('Name: '+d.data.name+', Category: '+d.data.category+', Value: '+d.data.value)
             toolTip.attr('data-value', d.value)
         })
+
+        // Hides tooltip when the mouse is moved away
         .on('mouseout', d => {
             toolTip.transition()
                     .style('visibility', 'hidden')
