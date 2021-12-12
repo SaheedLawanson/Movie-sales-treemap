@@ -31,39 +31,6 @@ d3.select('body').append('svg').attr('id', 'legend')      // Creating the legend
     .attr('width', 500)
 
 
-// CREATING THE LEGEND AND IT'S COMPONENTS
-function createLegend(){
-    // Creating rect elements for each color on the color map
-    let legendRect = d3.select('#legend')
-        .selectAll('g').data(colorMap)
-        .enter().append('g')
-
-    // Coloring rect elements
-    legendRect.append('rect')
-        .attr('class', 'legend-item')
-        .attr('width', 20)
-        .attr('height', 20)
-        .attr('fill', (d,i) => colorMap[i])  /* Color each rect element with the color that has 
-                                                the same corresponding index in the colorMap */
-
-        .attr('y', (d, i) => i*20 + i*10)   /* Each rect element should be positioned 10 units 
-                                                below the previous in the legend svg canvas*/
-
-    // Annotating rect elements
-    legendRect.append('text')           
-            .text((d, i) => {                   // Labelling each rect element with 
-                let children = data.children    //   the correct movie category
-                for (let j in children){
-                   if (i == j){
-                       return children[i].name
-                   }
-                }
-            })
-            .attr('y', (d, i) => i*20 + i*10 - 45)
-            .attr('x', 40)
-            .attr('class', 'legend-labels')
-}
-
 // CREATING OUR TREE MAP USING D3.js METHODS
 let treeMap = () => {
     // Formatting the data 
@@ -131,6 +98,39 @@ let treeMap = () => {
             .attr('x', 20)
             .attr('y', 20)
             .attr('class', 'tile-label')
+}
+
+// CREATING THE LEGEND AND IT'S COMPONENTS
+function createLegend(){
+    // Creating rect elements for each color on the color map
+    let legendRect = d3.select('#legend')
+        .selectAll('g').data(colorMap)
+        .enter().append('g')
+
+    // Coloring rect elements
+    legendRect.append('rect')
+        .attr('class', 'legend-item')
+        .attr('width', 20)
+        .attr('height', 20)
+        .attr('fill', (d,i) => colorMap[i])  /* Color each rect element with the color that has 
+                                                the same corresponding index in the colorMap */
+
+        .attr('y', (d, i) => i*20 + i*10)   /* Each rect element should be positioned 10 units 
+                                                below the previous in the legend svg canvas*/
+
+    // Annotating rect elements
+    legendRect.append('text')           
+            .text((d, i) => {                   // Labelling each rect element with 
+                let children = data.children    //   the correct movie category
+                for (let j in children){
+                   if (i == j){
+                       return children[i].name
+                   }
+                }
+            })
+            .attr('y', (d, i) => i*20 + i*10 - 45)
+            .attr('x', 40)
+            .attr('class', 'legend-labels')
 }
 
 // Pulling API
