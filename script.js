@@ -1,6 +1,7 @@
-let url = "https://cdn.freecodecamp.org/testable-projects-fcc/data/tree_map/movie-data.json";
+// SETTING UP OUR GLOBAL VARIABLES
 
-//setting up important global variables;
+// API url
+let url = "https://cdn.freecodecamp.org/testable-projects-fcc/data/tree_map/movie-data.json";
 
 let width = 1000;       // width of the svg canvas
 let height = 600;
@@ -13,7 +14,7 @@ let colorMap = [
     'rgb(245, 159, 202)'
 ]
 
-// Creating the svg canvas all the necessary HTML tags within the body
+// CREATING THE SVG CANVASES AND ALL OTHER NECESSARY HTML TAGS
 d3.select('body').append('h2')          // Creating an h2 tag using d3.js
     .attr('id', 'title')
     .text('Top Movie Sales')
@@ -29,25 +30,29 @@ let canvas = d3.select('body').append('svg')            // Main SVG canvas
 d3.select('body').append('svg').attr('id', 'legend')      // Creating the legend SVG tag
     .attr('width', 500)
 
-// Creating legend and it components
+
+// CREATING THE LEGEND AND IT'S COMPONENTS
 function createLegend(){
     // Creating rect elements for each color on the color map
     let legendRect = d3.select('#legend')
         .selectAll('g').data(colorMap)
         .enter().append('g')
 
-    // Coloring rect elements based
+    // Coloring rect elements
     legendRect.append('rect')
         .attr('class', 'legend-item')
         .attr('width', 20)
         .attr('height', 20)
-        .attr('fill', (d,i) => colorMap[i])
-        .attr('y', (d, i) => i*20 + i*10)
+        .attr('fill', (d,i) => colorMap[i])  /* Color each rect element with the color that has 
+                                                the same corresponding index in the colorMap */
+
+        .attr('y', (d, i) => i*20 + i*10)   /* Each rect element should be positioned 10 units 
+                                                below the previous in the legend svg canvas*/
 
     // Annotating rect elements
-    legendRect.append('text')
-            .text((d, i) => {
-                let children = data.children
+    legendRect.append('text')           
+            .text((d, i) => {                   // Labelling each rect element with 
+                let children = data.children    //   the correct movie category
                 for (let j in children){
                    if (i == j){
                        return children[i].name
@@ -59,18 +64,20 @@ function createLegend(){
             .attr('class', 'legend-labels')
 }
 
-
+// CREATING OUR TREE MAP USING D3.js METHODS
 let treeMap = () => {
-    // Formatting the data
+    // Formatting the data 
     let hierarchy = d3.hierarchy(data, node => node.children)
                         .sum(node => node['value'])
                         .sort((node1, node2) => node2.value - node1.value)
     leaves = hierarchy.leaves()
 
+    // Designing and fitting the treemap to the formatted data
     let createTreeMap = d3.treemap()
                             .size([width, height])
 
-
+    /* Calculates the coordinates and area to position blocks representing
+        each movie and stores them as property of the hierarchy variable */
     createTreeMap(hierarchy)
 
     // Creating block elements inside the canvas
@@ -84,11 +91,10 @@ let treeMap = () => {
     let toolTip = d3.select('body').append('div')
     .attr('id', 'tooltip')
 
-
     // Creating rect elements for each datapoint
     block.append('rect')
         .attr('class', 'tile')
-        .attr('fill', person => {
+        .attr('fill', person => {               //
             let parentName = person.parent.data.name
             let parentList = person.parent.parent.data.children.map(parentObj => {
                 return parentObj.name
