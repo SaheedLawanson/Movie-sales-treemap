@@ -54,14 +54,14 @@ let treeMap = () => {
                         .append('g')
                         .attr('transform', d => 'translate('+d.x0+', '+d.y0+')')
 
-    // Create tooltip
+    // Create tooltip 
     let toolTip = d3.select('body').append('div')
     .attr('id', 'tooltip')
 
     // Creating rect elements for each datapoint
     block.append('rect')
         .attr('class', 'tile')
-        .attr('fill', person => {               //
+        .attr('fill', person => {               // Color each block based on the movie category
             let parentName = person.parent.data.name
             let parentList = person.parent.parent.data.children.map(parentObj => {
                 return parentObj.name
@@ -73,11 +73,9 @@ let treeMap = () => {
                 }
             }
         })
-        .attr('width', d => d.x1 - d.x0)
+        // Dimensions of each block (calculated by our createTreeMap function)
+        .attr('width', d => d.x1 - d.x0)           
         .attr('height', d => d.y1 - d.y0)
-        .attr('data-name', d => d.data.name)
-        .attr('data-category', d => d.data.category)
-        .attr('data-value', d => d.data.value)
         .on('mouseover', d => {
             toolTip.transition()
                  .style('visibility', 'visible')
